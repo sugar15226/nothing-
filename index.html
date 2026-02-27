@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Yeti Login Portal</title>
+    <style>
+        body { background-color: #d1e8f0; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: 'Segoe UI', sans-serif; }
+        .login-card { background: white; padding: 50px; border-radius: 40px; display: flex; align-items: center; gap: 60px; box-shadow: 0 20px 50px rgba(0,0,0,0.15); }
+
+        /* Yeti Character Styling */
+        .yeti { 
+            position: relative; width: 160px; height: 200px; background: #ffffff; 
+            border-radius: 80px 80px 60px 60px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.2)); 
+            z-index: 5; transition: transform 0.3s;
+        }
+
+        /* Left-Right Shaking Animation */
+        @keyframes shake-head {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(-15deg); }
+            75% { transform: rotate(15deg); }
+            100% { transform: rotate(0deg); }
+        }
+        .shake-animation { animation: shake-head 0.4s ease-in-out 2; }
+
+        .hair { position: absolute; top: -15px; left: 35px; width: 90px; height: 30px; background: #ffffff; border-radius: 50%; z-index: 1; }
+        .horn { position: absolute; top: -30px; width: 35px; height: 50px; background: #ffe082; border-radius: 50% 50% 0 0; }
+        .horn.left { left: 15px; transform: rotate(-15deg); }
+        .horn.right { right: 15px; transform: rotate(15deg); }
+
+        .arm { 
+            position: absolute; width: 40px; height: 80px; top: 70px; background: #ffffff; 
+            border-radius: 35px; z-index: 6; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid #e0e0e0;
+        }
+        .arm.left { left: -15px; transform-origin: top right; }
+        .arm.right { right: -15px; transform-origin: top left; }
+
+        .face { margin: 40px auto; width: 110px; height: 65px; background: #b3e5fc; border-radius: 30px; display: flex; justify-content: center; align-items: center; gap: 20px; position: relative; }
+        .eye { width: 12px; height: 12px; background: #333; border-radius: 50%; transition: all 0.3s ease; }
+        .mouth { position: absolute; top: 40px; width: 30px; height: 3px; background: #333; border-radius: 2px; transition: all 0.3s ease; }
+
+        .form-container { width: 250px; text-align: center; }
+        input { width: 100%; padding: 1rem; margin-bottom: 1rem; border: 2px solid #e0e0e0; border-radius: 20px; box-sizing: border-box; }
+        #error-msg { color: #d32f2f; font-size: 0.9rem; margin-bottom: 1rem; height: 1.2rem; font-weight: bold; }
+        button { width: 100%; padding: 1rem; background: #b3e5fc; border: none; border-radius: 20px; font-weight: bold; color: #333; cursor: pointer; transition: all 0.3s ease; }
+        button:hover { background: #81d4fa; transform: scale(1.05); box-shadow: 0 5px 15px rgba(129, 212, 250, 0.4); }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <div class="yeti" id="yeti">
+            <div class="hair"></div>
+            <div class="horn left"></div>
+            <div class="horn right"></div>
+            <div class="arm left" id="arm-l"></div>
+            <div class="arm right" id="arm-r"></div>
+            <div class="face">
+                <div class="eye" id="eye-l"></div>
+                <div class="eye" id="eye-r"></div>
+                <div class="mouth" id="mouth"></div>
+            </div>
+        </div>
+
+        <div class="form-container">
+            <h3>Welcome!</h3>
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Password">
+            <div id="error-msg"></div>
+            <button id="loginBtn">Log In</button>
+        </div>
+    </div>
+
+    <script>
+        const eyes = document.querySelectorAll('.eye');
+        const mouth = document.getElementById('mouth');
+        const armL = document.getElementById('arm-l');
+        const armR = document.getElementById('arm-r');
+        const yeti = document.getElementById('yeti');
+        const errorMsg = document.getElementById('error-msg');
+        const usernameInput = document.getElementById('username');
+        const passwordInput = document.getElementById('password');
+
+        // Username Focus
+        usernameInput.addEventListener('focus', () => {
+            eyes.forEach(e => e.style.transform = 'translateX(5px)');
+            mouth.style.height = '8px';
+            mouth.style.borderBottom = '3px solid #333';
+            mouth.style.borderRadius = '0 0 50% 50%';
+            mouth.style.background = 'transparent';
+            armL.style.transform = 'rotate(10deg)';
+            armR.style.transform = 'rotate(-10deg)';
+        });
+
+        // Password Focus
+        passwordInput.addEventListener('focus', () => {
+            eyes.forEach(e => e.style.transform = 'translateX(0)');
+            mouth.style.height = '3px';
+            mouth.style.borderBottom = 'none';
+            mouth.style.background = '#333';
+            armL.style.transform = 'rotate(-60deg) translateY(20px) translateX(20px)';
+            armR.style.transform = 'rotate(60deg) translateY(20px) translateX(-20px)';
+        });
+
+        // Reset
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('blur', () => {
+                eyes.forEach(e => e.style.transform = 'translateX(0)');
+                mouth.style.height = '3px';
+                mouth.style.borderBottom = 'none';
+                mouth.style.background = '#333';
+                armL.style.transform = 'rotate(0deg)';
+                armR.style.transform = 'rotate(0deg)';
+            });
+        });
+
+        // Login Logic
+        document.getElementById('loginBtn').addEventListener('click', () => {
+            const secretPassword = 'theodore';
+            if (passwordInput.value === secretPassword) {
+                window.location.href = 'main.html';
+            } else {
+                // Updated to shake-animation
+                yeti.classList.add('shake-animation');
+                setTimeout(() => yeti.classList.remove('shake-animation'), 800);
+                errorMsg.textContent = `Wrong, try again sugarpulp!`;
+                passwordInput.style.border = '2px solid #d32f2f';
+            }
+        });
+    </script>
+</body>
+</html>
