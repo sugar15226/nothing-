@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Question</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;800&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --accent: #2A5D67;
+            --pink: #ff4d6d;
+            --off-white: #F9F7F2;
+            --bounce-ease: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        body {
+            background: var(--off-white);
+            font-family: 'Outfit', sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        /* Floating Hearts Background */
+        .bg-heart {
+            position: absolute;
+            color: rgba(255, 77, 109, 0.2);
+            animation: float 6s infinite linear;
+            z-index: 0;
+            user-select: none;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        .container {
+            max-width: 500px;
+            padding: 40px;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 10;
+            animation: fadeIn 1.2s var(--bounce-ease);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5rem;
+            color: var(--pink);
+            margin-bottom: 20px;
+        }
+
+        .reason-box {
+            font-size: 1.1rem;
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            font-style: italic;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            position: relative;
+            height: 60px;
+        }
+
+        .btn {
+            padding: 15px 45px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s var(--bounce-ease);
+            text-transform: uppercase;
+        }
+
+        #yesBtn {
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 10px 20px rgba(42, 93, 103, 0.3);
+        }
+
+        #yesBtn:hover {
+            transform: scale(1.15) translateY(-5px);
+            box-shadow: 0 15px 25px rgba(42, 93, 103, 0.5);
+            background: #347480;
+        }
+
+        #noBtn {
+            background: #2A5D67;
+            color: #ffffff;
+            position: absolute;
+            white-space: nowrap;
+            transition: all 0.2s ease-out; /* Smooth teleport movement */
+        }
+
+        /* Success screen styles */
+        #success-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 1000;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            animation: zoomIn 0.5s var(--bounce-ease);
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0); }
+            to { transform: scale(1); }
+        }
+
+        #success-overlay h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 5rem;
+            color: var(--pink);
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <script>
+        for (let i = 0; i < 15; i++) {
+            const heart = document.createElement('div');
+            heart.className = 'bg-heart';
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.fontSize = Math.random() * (30 - 15) + 15 + 'px';
+            heart.style.animationDelay = Math.random() * 5 + 's';
+            heart.style.animationDuration = Math.random() * (8 - 4) + 4 + 's';
+            document.body.appendChild(heart);
+        }
+    </script>
+
+    <div class="container">
+        <div id="main-content">
+            <h1>Dear Sugarpulp...</h1>
+            
+            <div class="reason-box">
+                "You are the most incredible person I've ever met. From our endless late-night talks to the way you make me laugh, I know I want to spend every moment of my life with you. You're my best friend and my greatest adventure."
+            </div>
+
+            <h3 style="margin-bottom: 25px; letter-spacing: 1px;">WILL YOU MARRY ME?</h3>
+
+            <div class="btn-group">
+                <button class="btn" id="yesBtn" onclick="showSuccess()">YES!</button>
+                <button class="btn" id="noBtn" onmouseover="moveNo()" onclick="moveNo()">NO</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="success-overlay">
+        <h2>YES! ❤️</h2>
+        <p style="font-size: 1.8rem; color: #555; margin-top: 20px;">That’s the best decision you've made in your life!</p>
+        <p style="font-size: 3rem;">💍✨🥰</p>
+    </div>
+
+    <script>
+        function moveNo() {
+            const noBtn = document.getElementById('noBtn');
+            const padding = 50;
+            
+            // Generate random positions within the visible window
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - padding);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - padding);
+
+            // Move the button
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = x + 'px';
+            noBtn.style.top = y + 'px';
+        }
+
+        function showSuccess() {
+            document.getElementById('success-overlay').style.display = 'flex';
+        }
+    </script>
+</body>
+</html>
