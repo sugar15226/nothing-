@@ -44,7 +44,7 @@
         .scroll-wrapper {
             display: flex;
             overflow-x: auto;
-            scrollbar-width: none;
+            scrollbar-width: none; /* Firefox */
             gap: 40px;
             padding: 40px 50px;
             scroll-behavior: smooth;
@@ -52,11 +52,11 @@
             position: relative;
             width: 100vw;
             box-sizing: border-box;
-            /* SMOOTH SCROLLING PROPERTIES */
+            /* SNAP SCROLLING */
             scroll-snap-type: x mandatory;
             -webkit-overflow-scrolling: touch; 
         }
-        .scroll-wrapper::-webkit-scrollbar { display: none; }
+        .scroll-wrapper::-webkit-scrollbar { display: none; } /* Chrome/Safari */
 
         .timeline-line {
             position: absolute;
@@ -77,8 +77,9 @@
             position: relative;
             z-index: 2;
             overflow: hidden;
-            /* ENSURES CARDS SNAP INTO PLACE */
+            /* SNAP ALIGNMENT */
             scroll-snap-align: center;
+            scroll-snap-stop: always;
             flex-shrink: 0;
         }
 
